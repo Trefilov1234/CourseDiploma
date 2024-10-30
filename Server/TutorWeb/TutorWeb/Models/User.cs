@@ -29,5 +29,8 @@ namespace TutorWeb.Models
         [Required]
         [Column("password")]
         public string Password { get; set; }
+
+        [Column("isAdmin")]
+        public bool IsAdmin { get; set; }
     }
 }

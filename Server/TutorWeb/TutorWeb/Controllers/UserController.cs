@@ -41,13 +41,7 @@ namespace TutorWeb.Controllers
             return user;
         }
 
-        // POST: api/users
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
-        {
-            User regUser = await userManager.Register(user);
-            return CreatedAtAction(nameof(PostUser), new { id = regUser.Id }, regUser);
-        }
+        
 
         // PUT: api/users/5
         [HttpPut("{id}")]

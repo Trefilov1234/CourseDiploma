@@ -24,14 +24,15 @@ namespace TutorWeb
                 {
                     builder.WithOrigins("http://localhost:3000")
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
+                        .AllowAnyMethod().AllowCredentials();
                 });
             });
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            
+            builder.Services.AddSingleton<IHttpContextAccessor,
+                        HttpContextAccessor>();
             var configuration = builder.Configuration;
             builder.Services.AddDbContext<TutorContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
