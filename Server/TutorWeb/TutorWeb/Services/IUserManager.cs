@@ -6,6 +6,6 @@ namespace TutorWeb.Services
     {
         bool Login(string login, string password);
 
-        Task<User> Register(User user);
+        Task<(string Message, User User)> Register(User user);
     }
 }

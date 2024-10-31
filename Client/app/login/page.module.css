@@ -9,7 +9,7 @@
     background-color: #15172b;
     border-radius: 20px;
     box-sizing: border-box;
-    height: 500px;
+    height: 420px;
     padding: 20px;
     width: 320px;
   }
@@ -126,3 +126,13 @@
     text-align: center;
     color: #36a936;
   }
+.noAcc{
+  background-color: rgb(107, 112, 114);
+  border-radius: 12px;
+  margin-top: 20px;
+  text-align: center;
+  
+}
+.noAccLink{
+  text-decoration: none;
+}

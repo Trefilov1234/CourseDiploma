@@ -3,6 +3,7 @@ import style from './page.module.css'
 import { useState } from "react";
 import { redirect } from 'next/navigation';
 import toast from "react-hot-toast";
+import Link from 'next/link';
 export default function Page() {
 
   const [login, setLogin] = useState("");
@@ -60,6 +61,7 @@ export default function Page() {
               <label htmlFor="password" className={style.placeholder}>Password</label>
           </div>
           <button className={style.submit} type="submit">Login</button>
+          <div className={style.noAcc}><Link href="/registration" className={style.noAccLink} >Don't you have an account?</Link></div>
       </form>
   </div>
   </>

@@ -13,6 +13,7 @@ export default function Page() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let res;
+        let resJson;
         try {
           res = await fetch("http://localhost:5262/tutorWebApi/registration", {
             method: "POST",
@@ -25,8 +26,7 @@ export default function Page() {
               password: password
             }),
           });
-          console.log(res);
-          //const resJson = await res.json();
+          resJson = await res.json();
           if (res.status === 201) {
             setFirstname("");
             setLastname("");
@@ -48,6 +48,14 @@ export default function Page() {
           else if (res.status === 400)
           {
             toast.error("The data you entered is incorrect");
+          }
+          else if(resJson.error==="login already exists")
+          {
+            toast.error("login already exists");
+          }
+          else if(resJson.error==="email already exists")
+          {
+            toast.error("email already exists");
           }
         }
       };

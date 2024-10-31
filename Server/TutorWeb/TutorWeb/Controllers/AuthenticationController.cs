@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
+using System;
 using TutorWeb.Data;
 using TutorWeb.Models;
 using TutorWeb.Services;
@@ -22,8 +23,15 @@ namespace TutorWeb.Controllers
         [HttpPost("tutorWebApi/registration")]
         public async Task<ActionResult<User>> Registration(User user)
         {
-            await userManager.Register(user);
-            return CreatedAtAction(nameof(Registration),new{ id=user.Id },user);
+            var res = await userManager.Register(user);
+            if (res.Message.Equals("ok"))
+            {
+                return CreatedAtAction(nameof(Registration), new { id = res.User.Id }, res.User);
+            }
+            else
+            {
+                return Conflict(new { Error=res.Message});
+            }
         }
 
         [HttpPost("tutorWebApi/login")]

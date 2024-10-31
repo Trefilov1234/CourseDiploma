@@ -1,10 +1,25 @@
 .header{
-    background-color: aquamarine;
+    background-color: blue;
     padding: 0.5em;
+    
 }
 .header ul{
     margin: 0;
     list-style: none;
     display: flex;
     justify-content: space-evenly;
+    display:inline-block;
+    width: 90%;
+}
+.header a{
+    color:beige;
+}
+.userSection
+{
+    text-align: center;
+    background-color: blue;
+    display:inline-block;
+}
+.userSection a{
+    color:black;
 }

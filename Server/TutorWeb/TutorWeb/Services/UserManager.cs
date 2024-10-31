@@ -41,15 +41,27 @@ namespace TutorWeb.Services
             return false;
         }
 
-        public async Task<User> Register(User user)
+        public async Task<(string Message,User User)> Register(User user)
         {
-            int userId = tutorContext.Users.Count()+1;
-            var passwordHash = SHA256Encrypter.Encript(user.Password);
-            user.Id = userId;
-            user.Password = passwordHash;
-            tutorContext.Users.Add(user);
-            await tutorContext.SaveChangesAsync();
-            return user;
+            if (tutorContext.Users.Where(x=>x.Login.Equals(user.Login)).FirstOrDefault()!=null)
+            {
+                return ("login already exists",null);
+            }
+            else if (tutorContext.Users.Where(x => x.Email.Equals(user.Email)).FirstOrDefault() != null)
+            {
+                return ("email already exists", null);
+            }
+            else
+            {
+                int userId = tutorContext.Users.Count() + 1;
+                var passwordHash = SHA256Encrypter.Encript(user.Password);
+                user.Id = userId;
+                user.Password = passwordHash;
+                tutorContext.Users.Add(user);
+                await tutorContext.SaveChangesAsync();
+                return ("ok",user);
+            }
         }
+
     }
 }
