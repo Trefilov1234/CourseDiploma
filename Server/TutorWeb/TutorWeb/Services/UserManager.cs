@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using TutorWeb.Data;
@@ -10,7 +11,7 @@ namespace TutorWeb.Services
     {
         private readonly TutorContext tutorContext;
         private readonly IHttpContextAccessor httpContextAccessor;
-
+        public UserCredentials CurrentUser { get; set; }
         public UserManager(TutorContext tutorContext, IHttpContextAccessor httpContextAccessor)
         {
             this.tutorContext = tutorContext;
@@ -29,12 +30,13 @@ namespace TutorWeb.Services
                 {
                     Login = user.Login,
                     IsAdmin = user.IsAdmin,
-                    Expiration = DateTime.Now + TimeSpan.FromMinutes(1)
-
+                    Firstname=user.Firstname,
+                    Lastname=user.Lastname,
+                    Expiration= DateTime.Now + TimeSpan.FromHours(1)
                 };
                 var userCred = JsonSerializer.Serialize(userCredentials);
-                var hash = AesOperation.EncryptString("b14ca5898a4e4133bbce2ea2315a1916", userCred);// шифруем куки
-                httpContextAccessor.HttpContext.Response.Cookies.Append("auth", hash);
+                var hash = AesOperation.EncryptString("b14ca5898a4e4133bbce2ea2315a1916", userCred);
+                httpContextAccessor.HttpContext.Response.Cookies.Append("auth", hash,new CookieOptions() { Expires= DateTime.Now + TimeSpan.FromHours(1) });
                 return true;
 
             }
@@ -61,6 +63,66 @@ namespace TutorWeb.Services
                 await tutorContext.SaveChangesAsync();
                 return ("ok",user);
             }
+        }
+        public UserCredentials GetUserCrededantials()
+        {
+
+            try
+            {
+                if (httpContextAccessor.HttpContext.Request.Cookies.ContainsKey("auth"))
+                {
+                    var hash = httpContextAccessor.HttpContext.Request.Cookies["auth"];
+                    var json = AesOperation.DecryptString("b14ca5898a4e4133bbce2ea2315a1916", hash);
+                    CurrentUser = JsonSerializer.Deserialize<UserCredentials>(json);
+                    return CurrentUser;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return null;
+        }
+
+        public async Task<(string Message, User User)> ChangeUser(ChangeUserParams changeUserParams)
+        {
+            if (tutorContext.Users.Where(x => x.Login.Equals(changeUserParams.Login)).FirstOrDefault() != null)//todo переделать логику при обновлении данных пользователя
+            {
+                return ("login already exists", null);
+            }
+            else if (tutorContext.Users.Where(x => x.Email.Equals(changeUserParams.Email)).FirstOrDefault() != null)
+            {
+                return ("email already exists", null);
+            }
+            else
+            {
+                UserCredentials userCredentials = new UserCredentials()
+                {
+                    Login = changeUserParams.Login,
+                    IsAdmin = CurrentUser.IsAdmin,
+                    Firstname = changeUserParams.Firstname,
+                    Lastname = changeUserParams.Lastname,
+                    Expiration = CurrentUser.Expiration,
+                };
+                var userCred = JsonSerializer.Serialize(userCredentials);
+                var hash = AesOperation.EncryptString("b14ca5898a4e4133bbce2ea2315a1916", userCred);
+                var curUser = await tutorContext.Users.Where(x => x.Login.Equals(CurrentUser.Login)).FirstAsync();
+                curUser.Login = changeUserParams.Login;
+                curUser.Email = changeUserParams.Email;
+                curUser.Firstname = changeUserParams.Firstname;
+                curUser.Lastname = changeUserParams.Lastname;
+                if (!String.IsNullOrEmpty(changeUserParams.Password))
+                {
+                    curUser.Password = SHA256Encrypter.Encript(changeUserParams.Password);
+                }
+
+                tutorContext.Users.Update(curUser);
+                await tutorContext.SaveChangesAsync();
+                httpContextAccessor.HttpContext.Response.Cookies.Append("auth", hash, new CookieOptions() { Expires = CurrentUser.Expiration });
+                return ("ok",curUser);
+            }
+            
+            
         }
 
     }

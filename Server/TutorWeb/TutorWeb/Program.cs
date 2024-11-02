@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using TutorWeb.Data;
+using TutorWeb.Middlewares;
 using TutorWeb.Services;
 namespace TutorWeb
 {
@@ -14,12 +15,6 @@ namespace TutorWeb
             var policyName = "policyName1";
             builder.Services.AddCors(options =>
             {
-                /*options.AddDefaultPolicy(builder =>
-                {
-                    builder.AllowAnyOrigin()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });*/
                 options.AddPolicy(name: policyName, builder =>
                 {
                     builder.WithOrigins("http://localhost:3000")
@@ -28,7 +23,7 @@ namespace TutorWeb
                 });
             });
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddSingleton<IHttpContextAccessor,
@@ -45,7 +40,7 @@ namespace TutorWeb
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseMiddleware<AuthMiddleware>();
             app.UseHttpsRedirection();
             app.UseCors(policyName);
 

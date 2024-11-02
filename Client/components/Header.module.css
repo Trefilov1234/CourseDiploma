@@ -9,7 +9,7 @@
     display: flex;
     justify-content: space-evenly;
     display:inline-block;
-    width: 90%;
+    width: 75%;
 }
 .header a{
     color:beige;
@@ -17,9 +17,13 @@
 .userSection
 {
     text-align: center;
-    background-color: blue;
+    background-color: rgb(255, 255, 255);
     display:inline-block;
+    width: 20%;
 }
 .userSection a{
     color:black;
+}
+.profileLink{
+ margin-right: 10px;
 }

@@ -1,14 +1,12 @@
 'use client'
 import style from './page.module.css'
 import { useState } from "react";
-import { redirect } from 'next/navigation';
 import toast from "react-hot-toast";
 import Link from 'next/link';
 export default function Page() {
 
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     let res;
@@ -35,8 +33,8 @@ export default function Page() {
     {
       if (res.status === 200)
       {
-        toast.success("You have successfully logged in!");
-        redirect('/');
+        window.location.replace('/');
+        
       }
       else if (res.status === 400)
       {

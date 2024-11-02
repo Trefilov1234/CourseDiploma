@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using TutorWeb.Data;
@@ -8,7 +9,6 @@ using TutorWeb.Services;
 namespace TutorWeb.Controllers
 {
     [ApiController]
-    [Route("tutorWebApi/[controller]")]
     public class UserController: ControllerBase
     {
         private readonly TutorContext _context;
@@ -21,60 +21,51 @@ namespace TutorWeb.Controllers
         }
 
         // GET: api/users
-        [HttpGet]
+        /*[HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
-        }
+        }*/
 
-        // GET: api/users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        [HttpGet("tutorWebApi/getUser/{login}")]
+        public async Task<ActionResult<User>> GetUser(string login)
         {
-            var user = await _context.Users.FindAsync(id);
+            Console.Write(login);
+            var user = await _context.Users.Where(x => x.Login.Equals(login)).FirstAsync();
 
             if (user == null)
             {
                 return NotFound();
             }
-
-            return user;
+            return Ok(user);
         }
 
-        
-
-        // PUT: api/users/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        [HttpGet("tutorWebApi/getUserCredentials")]
+        public IActionResult GetUserCredentials()
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
+            return Ok(userManager.CurrentUser);
+        }
 
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
+        [HttpPost("tutorWebApi/changeUser")]
+        public async Task<IActionResult> PutUser(ChangeUserParams changeUserParams)
+        {
+            if(userManager.CurrentUser==null)
             {
-                await _context.SaveChangesAsync();
+                return Unauthorized();
             }
-            catch (DbUpdateConcurrencyException)
+            var res = await userManager.ChangeUser(changeUserParams);
+            if (res.Message.Equals("ok"))
             {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Ok(res.User);
             }
-
-            return NoContent();
+            else
+            {
+                return Conflict(new { Error = res.Message });
+            }
         }
 
         // DELETE: api/users/5
-        [HttpDelete("{id}")]
+        /*[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -89,9 +80,9 @@ namespace TutorWeb.Controllers
             return NoContent();
         }
 
-        private bool UserExists(int id)
+        private bool UserExists(string login)
         {
-            return _context.Users.Any(e => e.Id == id);
-        }
+            return _context.Users.Any(e => e.Login == login);
+        }*/
     }
 }

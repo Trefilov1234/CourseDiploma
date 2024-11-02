@@ -7,5 +7,8 @@ namespace TutorWeb.Services
         bool Login(string login, string password);
 
         Task<(string Message, User User)> Register(User user);
+        UserCredentials CurrentUser { get; set; }
+        UserCredentials GetUserCrededantials();
+        Task<(string Message, User User)> ChangeUser(ChangeUserParams changeUserParams);
     }
 }
