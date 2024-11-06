@@ -86,11 +86,12 @@ namespace TutorWeb.Services
 
         public async Task<(string Message, User User)> ChangeUser(ChangeUserParams changeUserParams)
         {
-            if (tutorContext.Users.Where(x => x.Login.Equals(changeUserParams.Login)).FirstOrDefault() != null)//todo переделать логику при обновлении данных пользователя
+            var curUser = await tutorContext.Users.Where(x => x.Login.Equals(CurrentUser.Login)).FirstAsync();
+            if (tutorContext.Users.Where(x => x.Login.Equals(changeUserParams.Login)).FirstOrDefault() != null&& curUser.Login != changeUserParams.Login)
             {
                 return ("login already exists", null);
             }
-            else if (tutorContext.Users.Where(x => x.Email.Equals(changeUserParams.Email)).FirstOrDefault() != null)
+            else if (tutorContext.Users.Where(x => x.Email.Equals(changeUserParams.Email)).FirstOrDefault() != null&& curUser.Email != changeUserParams.Email)
             {
                 return ("email already exists", null);
             }
@@ -106,7 +107,6 @@ namespace TutorWeb.Services
                 };
                 var userCred = JsonSerializer.Serialize(userCredentials);
                 var hash = AesOperation.EncryptString("b14ca5898a4e4133bbce2ea2315a1916", userCred);
-                var curUser = await tutorContext.Users.Where(x => x.Login.Equals(CurrentUser.Login)).FirstAsync();
                 curUser.Login = changeUserParams.Login;
                 curUser.Email = changeUserParams.Email;
                 curUser.Firstname = changeUserParams.Firstname;
@@ -123,6 +123,20 @@ namespace TutorWeb.Services
             }
             
             
+        }
+        public void Logout()
+        {
+            UserCredentials userCredentials = new UserCredentials()
+            {
+                Login = CurrentUser.Login,
+                IsAdmin = CurrentUser.IsAdmin,
+                Firstname = CurrentUser.Firstname,
+                Lastname = CurrentUser.Lastname,
+                Expiration = DateTime.Now + TimeSpan.FromDays(-1)
+            };
+            var userCred = JsonSerializer.Serialize(userCredentials);
+            var hash = AesOperation.EncryptString("b14ca5898a4e4133bbce2ea2315a1916", userCred);
+            httpContextAccessor.HttpContext.Response.Cookies.Append("auth", hash, new CookieOptions() { Expires = DateTime.Now + TimeSpan.FromDays(-1) });
         }
 
     }

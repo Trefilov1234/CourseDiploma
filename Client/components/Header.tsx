@@ -9,6 +9,7 @@ import Spinner from './Spinner';
 const
     pages=[
         {href:'/',title: 'Home'},
+        {href:'/createTutorPage',title: 'Create tutor page'}
     ];
     
 export default function Header(){
@@ -47,6 +48,25 @@ export default function Header(){
         setUserCookie(Cookies.get("auth"));
     },[]);
     
+    const logout = async () => {
+        let res;
+        try {
+          res = await fetch("http://localhost:5262/tutorWebApi/logout", {
+            method: "POST",
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json;charset=utf-8'},
+            
+          });
+          console.log(res);
+          if(res.status===200)
+          {
+            window.location.replace('/');
+          }
+        } catch (err) {
+          console.log(err);
+        }
+    };
+
     if(isLoading)
     {
         return <header>
@@ -68,7 +88,7 @@ export default function Header(){
                     {pages.map(({href,title})=><li key={href}><Link href={href}>{title}</Link></li>)}
                 </ul>
                 <div className={style.userSection}>
-                    {userCookie?<div><Link href="/profile" className={style.profileLink}>{creds?creds.login:""}</Link><Link href="/logout">logout</Link></div>:<Link href="/login">login</Link>}           
+                    {userCookie?<div><Link href="/profile" className={style.profileLink}>{creds?creds.login:""}</Link><Link href='#' onClick={logout}>logout</Link></div>:<Link href="/login">login</Link>}           
                 </div>
             </nav>
         </header>

@@ -10,5 +10,6 @@ namespace TutorWeb.Services
         UserCredentials CurrentUser { get; set; }
         UserCredentials GetUserCrededantials();
         Task<(string Message, User User)> ChangeUser(ChangeUserParams changeUserParams);
+        void Logout();
     }
 }

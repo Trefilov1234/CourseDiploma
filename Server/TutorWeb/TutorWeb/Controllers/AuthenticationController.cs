@@ -47,5 +47,16 @@ namespace TutorWeb.Controllers
                 return BadRequest();
             } 
         }
+        [HttpPost("tutorWebApi/logout")]
+        public IActionResult Logout()
+        {
+
+            if (userManager.CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+            userManager.Logout();
+            return Ok();
+        }
     }
 }

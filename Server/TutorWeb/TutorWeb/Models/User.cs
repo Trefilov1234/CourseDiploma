@@ -32,5 +32,7 @@ namespace TutorWeb.Models
 
         [Column("isAdmin")]
         public bool IsAdmin { get; set; }
+
+        public IEnumerable<TutorInfo> TutorInfos { get; set; }
     }
 }

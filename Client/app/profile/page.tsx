@@ -27,6 +27,7 @@ export default function Page() {
     const handleSubmit = async (e) => {
       e.preventDefault();
       let res;
+      let jsonRes;
       try {
         res = await fetch("http://localhost:5262/tutorWebApi/changeUser", {
           method: "POST",
@@ -40,6 +41,7 @@ export default function Page() {
             lastname:lastname
           }),
         });
+        jsonRes=await res.json();
         console.log(res);
         if (res.status === 200) {
           setLogin("");
@@ -62,11 +64,11 @@ export default function Page() {
         {
           toast.error("The data you entered is incorrect");
         }
-        else if(res.error==="login already exists")
+        else if(jsonRes.error==="login already exists")
         {
             toast.error("login already exists");
         }
-        else if(res.error==="email already exists")
+        else if(jsonRes.error==="email already exists")
         {
               toast.error("email already exists");
         }
@@ -124,8 +126,8 @@ export default function Page() {
     return <>
     <div className={style.back}>
         <form className={style.form} onSubmit={handleSubmit}>
-            <div className={style.title}>Welcome</div>
-            <div className={style.subtitle}>Let's create your account!</div>
+            <div className={style.title}>Hello</div>
+            <div className={style.subtitle}>Let's change your credentials!</div>
             <div className={[style.inputContainer, style.ic1].join(' ')}>
                 <input id="firstname" className={style.input} type="text"  onChange={(e)=>setFirstname(e.target.value)} value={firstname}/>
                 <div className={style.cut}></div>
