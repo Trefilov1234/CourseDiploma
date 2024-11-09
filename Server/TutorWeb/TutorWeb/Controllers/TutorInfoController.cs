@@ -8,6 +8,8 @@ using System.Web;
 using TutorWeb.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
+using TutorWeb.Helpers;
 namespace TutorWeb.Controllers
 {
     [ApiController]
@@ -68,7 +70,7 @@ namespace TutorWeb.Controllers
                     Id = t.Id,
                     Subject = t.Subject,
                     Description = t.Description,
-                    ImagePath= t.ImagePath,
+                    Image= FileHelper.ImageToBase64String(t.ImagePath),
                     User = new
                     {
                         Id = t.UserId,
@@ -76,36 +78,38 @@ namespace TutorWeb.Controllers
                         LastName = t.User.Lastname
                     }
                 }).ToListAsync();
-            List<ImageModel> images = new List<ImageModel>();
-            foreach (var tutorInfo in tutInf)
-            {
-                byte[] bytes;
-                if (tutorInfo.ImagePath == null)
-                {
-                    bytes = [];
-                }
-                else
-                {
-                    bytes = System.IO.File.ReadAllBytes(tutorInfo.ImagePath);
-                }
-                images.Add(new ImageModel
-                {
-                    TutorInfoId = tutorInfo.Id,
-                    Data = Convert.ToBase64String(bytes, 0, bytes.Length)
-                });
-                
-            }
             return Ok(new
             {
-                tutorInfos = tutInf,
-                images= images
+                tutorInfos = tutInf
             });        
         }
 
         [HttpGet("tutorWebApi/getTutorInfoById/{id}")]
-        public async Task<ActionResult<TutorInfo>> GetTutorInfoById(int id)
+        public async Task<IActionResult> GetTutorInfoById(int id)
         {
-            return await _tutorContext.TutorInfos.Include(x=>x.User).Where(x=>x.Id.Equals(id)).FirstOrDefaultAsync();
+            if (userManager.CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+            var tutorInfo=await _tutorContext.TutorInfos.Where(x => x.Id.Equals(id)).Select(t => new
+            {
+                Id = t.Id,
+                Subject = t.Subject,
+                Description = t.Description,
+                Image = FileHelper.ImageToBase64String(t.ImagePath),
+                User = new
+                {
+                    Id = t.UserId,
+                    FirstName = t.User.Firstname,
+                    LastName = t.User.Lastname
+                }
+            }
+            ).FirstOrDefaultAsync();
+
+            return Ok(new
+            {
+                tutorInfo = tutorInfo
+            });
         }
     }
 }

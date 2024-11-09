@@ -1,5 +1,5 @@
-export default function Page({params}) { 
-    return <>
-    <div>{params.id}</div>
-    </>
+import ClientComponent from './clientComponent'
+export default async function Page({params}) { 
+    const { id } = await params;
+    return <ClientComponent id={id}/>
 }

@@ -27,14 +27,12 @@ export default function Page() {
     }
     else if(data)
     {
-      let images=data['images'];
-      console.log(images);
       let tutorInfos=data['tutorInfos'];
       console.log(tutorInfos);
       return <>
       <Stack direction="horizontal" gap={3}>
       {tutorInfos.map((tutInf)=>
-            <TutorInfo key={tutInf.id} subject={tutInf.subject} description={tutInf.description} image={images.find((el)=>el.tutorInfoId==tutInf.id)} firstname={tutInf.user.firstName} 
+            <TutorInfo key={tutInf.id} subject={tutInf.subject} description={tutInf.description} image={tutInf.image} firstname={tutInf.user.firstName} 
           lastname={tutInf.user.lastName} tutInfId={tutInf.id}/>
         )}
       </Stack>
