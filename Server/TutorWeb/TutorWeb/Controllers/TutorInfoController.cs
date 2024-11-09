@@ -7,6 +7,7 @@ using TutorWeb.Services;
 using System.Web;
 using TutorWeb.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 namespace TutorWeb.Controllers
 {
     [ApiController]
@@ -57,6 +58,54 @@ namespace TutorWeb.Controllers
             await _tutorContext.SaveChangesAsync();
             return Ok();
         }
-       
+
+        [HttpGet("tutorWebApi/getAllTutorInfos")]
+        public async Task<IActionResult> GetAllTutorInfos()
+        {
+            var tutInf = await _tutorContext.TutorInfos.Select(t => 
+                new
+                {
+                    Id = t.Id,
+                    Subject = t.Subject,
+                    Description = t.Description,
+                    ImagePath= t.ImagePath,
+                    User = new
+                    {
+                        Id = t.UserId,
+                        FirstName = t.User.Firstname,
+                        LastName = t.User.Lastname
+                    }
+                }).ToListAsync();
+            List<ImageModel> images = new List<ImageModel>();
+            foreach (var tutorInfo in tutInf)
+            {
+                byte[] bytes;
+                if (tutorInfo.ImagePath == null)
+                {
+                    bytes = [];
+                }
+                else
+                {
+                    bytes = System.IO.File.ReadAllBytes(tutorInfo.ImagePath);
+                }
+                images.Add(new ImageModel
+                {
+                    TutorInfoId = tutorInfo.Id,
+                    Data = Convert.ToBase64String(bytes, 0, bytes.Length)
+                });
+                
+            }
+            return Ok(new
+            {
+                tutorInfos = tutInf,
+                images= images
+            });        
+        }
+
+        [HttpGet("tutorWebApi/getTutorInfoById/{id}")]
+        public async Task<ActionResult<TutorInfo>> GetTutorInfoById(int id)
+        {
+            return await _tutorContext.TutorInfos.Include(x=>x.User).Where(x=>x.Id.Equals(id)).FirstOrDefaultAsync();
+        }
     }
 }
