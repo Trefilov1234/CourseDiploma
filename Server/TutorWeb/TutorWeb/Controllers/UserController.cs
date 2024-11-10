@@ -43,7 +43,7 @@ namespace TutorWeb.Controllers
         [HttpGet("tutorWebApi/getUserCredentials")]
         public IActionResult GetUserCredentials()
         {
-            return Ok(userManager.CurrentUser);
+            return Ok(new { credentials= userManager.CurrentUser });
         }
 
         [HttpPost("tutorWebApi/changeUser")]

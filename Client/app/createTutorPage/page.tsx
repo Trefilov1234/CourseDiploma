@@ -49,6 +49,10 @@ export default function Page()
           {
             window.location.replace('/login');
           }
+          else if(res.status===400)
+          {
+            toast.error("The data you entered is incorrect")
+          }
         }
       };
 

@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import Spinner from './Spinner';
+import useSWRImmutable from 'swr/immutable'
 
 const
     pages=[
@@ -27,9 +28,14 @@ export default function Header(){
     const [userCookie, setUserCookie] = useState("");
     const [creds, setCreds] = useState(null);
     const [credsGot,setCredsGot]=useState(false);
-    const {data,error,isLoading,isValidating,mutate}=useSWR('http://localhost:5262/tutorWebApi/getUserCredentials',fetcher);
+    const [isLoading,setIsLoading] = useState(true);
+    /*const {data,error,isLoading,isValidating,mutate}=useSWR('http://localhost:5262/tutorWebApi/getUserCredentials',fetcher,{revalidateOnFocus: false,
+      revalidateIfStale: false,
+      revalidateOnReconnect: false,});*/
 
     const getCredentials = async () => {
+        setIsLoading(true);
+        console.log("haha");
         let res;
         try {
           res = await fetch("http://localhost:5262/tutorWebApi/getUserCredentials", {
@@ -38,14 +44,19 @@ export default function Header(){
             headers: { 'Content-Type': 'application/json;charset=utf-8'},
             
           });
-          setCreds(await res.json());
+          let jsonRes=await res.json();
+          if(jsonRes)
+          {
+            setIsLoading(false);
+            setCreds(jsonRes);
+          }
+          
         } catch (err) {
           console.log(err);
         }
     };
     useEffect(()=>{
-        getCredentials();
-        setUserCookie(Cookies.get("auth"));
+      getCredentials().then(()=>setUserCookie(Cookies.get("auth")));
     },[]);
     
     const logout = async () => {
@@ -88,7 +99,7 @@ export default function Header(){
                     {pages.map(({href,title})=><li key={href}><Link href={href}>{title}</Link></li>)}
                 </ul>
                 <div className={style.userSection}>
-                    {userCookie?<div><Link href="/profile" className={style.profileLink}>{creds?creds.login:""}</Link><Link href='#' onClick={logout}>logout</Link></div>:<Link href="/login">login</Link>}           
+                    {userCookie?<div><Link href="/profile" className={style.profileLink}>{creds.credentials?creds.credentials.login:""}</Link><Link href='#' onClick={logout}>logout</Link></div>:<Link href="/login">login</Link>}           
                 </div>
             </nav>
         </header>

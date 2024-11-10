@@ -81,6 +81,7 @@ namespace TutorWeb.Services
             {
                 Console.WriteLine(ex.ToString());
             }
+            httpContextAccessor.HttpContext.Response.Cookies.Append("auth", "", new CookieOptions() { Expires = DateTime.Now + TimeSpan.FromDays(-1) });
             return null;
         }
 

@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from "react";
-import useSWR from "swr";
 import Spinner from '../components/Spinner';
 import TutorInfo from "../components/TutorInfoCard";
 import Stack from 'react-bootstrap/Stack';
@@ -15,12 +14,19 @@ export default function Page() {
         
       });
     if (!response.ok) throw new Error('fetch ' + response.status);
-    let res=await response.json();
-    console.log(res);
-    return res;
+    let jsonRes=await response.json();
+    console.log(jsonRes);
+    if(jsonRes)
+      {
+        setIsLoading(false);
+        setData(jsonRes);
+      }
   };
-  const {data,error,isLoading,isValidating,mutate}=useSWR('http://localhost:5262/tutorWebApi/getAllTutorInfos',fetcher);
-  
+  const [isLoading,setIsLoading] = useState(true);
+  const [data,setData] = useState(true);
+  useEffect(()=>{
+    fetcher();
+  },[]);
   if(isLoading)
     {
       return <Spinner/>

@@ -34,6 +34,10 @@ namespace TutorWeb.Controllers
             var form = await Request.ReadFormAsync();
             var value1 = form["subject"];
             var value2 = form["description"];
+            if (String.IsNullOrEmpty(value1) || String.IsNullOrEmpty(value2))
+            {
+                return BadRequest();
+            }
             var file = Request.Form.Files.FirstOrDefault();
             string path;
             TutorInfo tutorInfo = new TutorInfo();
