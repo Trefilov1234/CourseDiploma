@@ -80,7 +80,8 @@ namespace TutorWeb.Controllers
                     {
                         Id = t.UserId,
                         FirstName = t.User.Firstname,
-                        LastName = t.User.Lastname
+                        LastName = t.User.Lastname,
+                        Email=t.User.Email
                     }
                 }).ToListAsync();
             return Ok(new
@@ -106,7 +107,8 @@ namespace TutorWeb.Controllers
                 {
                     Id = t.UserId,
                     FirstName = t.User.Firstname,
-                    LastName = t.User.Lastname
+                    LastName = t.User.Lastname,
+                    Email = t.User.Email
                 }
             }
             ).FirstOrDefaultAsync();

@@ -1,0 +1,9 @@
+.back {
+    align-items: center;
+    background-color:  #6e6c66;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-height: 100vh;
+    overflow: auto;
+  }

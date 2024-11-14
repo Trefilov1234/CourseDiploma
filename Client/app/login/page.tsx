@@ -48,20 +48,21 @@ export default function Page() {
 
   return <>
   <div className={style.back}>
-      <Form  onSubmit={handleSubmit} style={{ width: '400px', margin: '100px auto',backgroundColor: 'gray', borderRadius: '12px' }}>
+      <Form  onSubmit={handleSubmit} style={{ width: '400px', margin: '100px auto',backgroundColor: 'gray', borderRadius: '12px', paddingLeft: '10px',paddingRight: '10px' }}>
         <Form.Label style={{display:'block', color: 'whitesmoke', fontWeight:'bold', fontSize: '2.2rem',textAlign: 'center'}}>Welcome</Form.Label>
         <Form.Label style={{display:'block', color: 'whitesmoke', fontWeight:'bold', fontSize: '2.2rem',textAlign: 'center'}}>Let's log in to your account!</Form.Label>
-        <Form.Group className="mb-3" controlId="login" style={{width:'380px',margin: '0px 10px'}}>
+        <Form.Group className="mb-3" controlId="login" style={{margin: '0px 10px'}}>
           <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Login</Form.Label>
           <Form.Control type="text"  onChange={(e)=>setLogin(e.target.value)} value={login} required/>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="passwrod" style={{width:'380px',margin: '0px 10px'}}>
+        <Form.Group className="mb-3" controlId="passwrod" style={{margin: '0px 10px'}}>
           <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Password</Form.Label>
           <Form.Control type="password"   onChange={(e)=>setPassword(e.target.value)} value={password}/>
         </Form.Group>
         <div style={{textAlign:'center',margin:'0 0 20px 0'}}>
           <Button type="submit" size="lg" variant="dark">Log in</Button>
         </div>
+        <Link style={{display:'block', color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem',textAlign: 'center', textDecoration:'none'}} href={'/registration'}>Don't you have an account?</Link>
       </Form>
     </div>
   </>

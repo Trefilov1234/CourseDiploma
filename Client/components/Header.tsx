@@ -6,6 +6,10 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import Spinner from './Spinner';
 import useSWRImmutable from 'swr/immutable'
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const
     pages=[
@@ -78,30 +82,24 @@ export default function Header(){
         }
     };
 
-    if(isLoading)
-    {
-        return <header>
-            <nav className={style.header}>
-                <ul>
-                    {pages.map(({href,title})=><li key={href}><Link href={href}>{title}</Link></li>)}
-                </ul>
-                <div className={style.userSection}>
-                    <Spinner/>
-                </div>
-            </nav>
-        </header>
-    }
-    else
-    {
-    return <header>
-            <nav className={style.header}>
-                <ul>
-                    {pages.map(({href,title})=><li key={href}><Link href={href}>{title}</Link></li>)}
-                </ul>
-                <div className={style.userSection}>
-                    {userCookie?<div><Link href="/profile" className={style.profileLink}>{creds.credentials?creds.credentials.login:""}</Link><Link href='#' onClick={logout}>logout</Link></div>:<Link href="/login">log in</Link>}           
-                </div>
-            </nav>
-        </header>
-    }
+    return <>
+    <Navbar expand="lg" className="bg-body-tertiary" style={{zIndex:'1000',position:'fixed',width:'100%',top:'0'}}>
+      <Container>
+        <Navbar.Brand href="/">Tutor</Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/createTutorPage">Create tutor page</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+        <Navbar.Collapse className="justify-content-end">
+          {isLoading? <Nav><Spinner/></Nav>:
+          <Nav>
+          {userCookie?<Nav><Nav.Link href="/profile">{creds.credentials?creds.credentials.login:""}
+          </Nav.Link><Nav.Link onClick={logout}>logout</Nav.Link></Nav>:<Nav.Link href="/login">log in</Nav.Link>}
+          </Nav>}
+        </Navbar.Collapse>
+      </Container>
+    </Navbar></>
 }

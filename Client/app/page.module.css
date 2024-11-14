@@ -1,0 +1,28 @@
+
+ /* @media (min-width: 500px) {
+    .back {
+        align-items: center;
+        background-color:  #6e6c66;
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+      }
+  }
+  
+  @media (max-width: 800px) {
+    .back {
+        align-items: center;
+        background-color:  #6e6c66;
+        display: flex;
+        justify-content: center;
+        height: auto;
+      }
+  }*/
+  .back {
+    align-items: center;
+    background-color:  #6e6c66;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    overflow:hidden;
+  }

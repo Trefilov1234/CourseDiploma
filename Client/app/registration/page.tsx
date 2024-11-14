@@ -71,26 +71,26 @@ export default function Page() {
       };
     return <>
     <div className={style.back}>
-      <Form  onSubmit={handleSubmit} style={{ width: '500px', margin: '100px auto',backgroundColor: 'gray', borderRadius: '12px' }}>
+      <Form  onSubmit={handleSubmit} style={{ width: '500px', margin: '100px 10px 100px 10px',backgroundColor: 'gray', borderRadius: '12px', paddingLeft: '10px',paddingRight:'10px' }}>
         <Form.Label style={{display:'block', color: 'whitesmoke', fontWeight:'bold', fontSize: '2.2rem',textAlign: 'center'}}>Welcome</Form.Label>
         <Form.Label style={{display:'block', color: 'whitesmoke', fontWeight:'bold', fontSize: '2.2rem',textAlign: 'center'}}>Let's create your account!</Form.Label>
-        <Form.Group className="mb-3" controlId="first name" style={{width:'480px',margin: '0px 10px'}}>
+        <Form.Group className="mb-3" controlId="first name" style={{margin: '0px 10px'}}>
           <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>First name</Form.Label>
           <Form.Control type="text"  onChange={(e)=>setFirstname(e.target.value)} value={firstname} required/>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="last name" style={{width:'480px',margin: '0px 10px'}}>
+        <Form.Group className="mb-3" controlId="last name" style={{margin: '0px 10px'}}>
           <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Last name</Form.Label>
           <Form.Control type="text"   onChange={(e)=>setLastname(e.target.value)} value={lastname}/>
         </Form.Group>
-        <Form.Group className="mb-3"  controlId="email" style={{width:'480px',margin: '0px 10px'}}>
+        <Form.Group className="mb-3"  controlId="email" style={{margin: '0px 10px'}}>
           <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Email</Form.Label>
           <Form.Control type="text" onChange={(e)=>setEmail(e.target.value)} value={email} required/>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="login" style={{width:'480px',margin: '0px 10px'}}>
+        <Form.Group className="mb-3" controlId="login" style={{margin: '0px 10px'}}>
           <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Login</Form.Label>
           <Form.Control type="text" onChange={(e)=>setLogin(e.target.value)} value={login} required/>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="password" style={{width:'480px',margin: '0px 10px'}}>
+        <Form.Group className="mb-3" controlId="password" style={{margin: '0px 10px'}}>
           <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Password</Form.Label>
           <Form.Control type="password" onChange={(e)=>setPassword(e.target.value)} value={password} required/>
         </Form.Group>

@@ -8,6 +8,9 @@ import { fork } from 'child_process';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 export default function Page()
 {
     const [subject, setSubject] = useState("");
@@ -62,27 +65,26 @@ export default function Page()
         console.log(e.target.files);
     }
     return <>
-  <div className={style.back}>
-      <form className={style.form} onSubmit={handleSubmit}>
-          <div className={style.title}>Hello</div>
-          <div className={style.subtitle}>Let's create your tutor page!</div>
-          <div className={[style.inputContainer, style.ic2].join(' ')}>
-              <input id="subject" className={style.input} type="text"  onChange={(e)=>setSubject(e.target.value)} value={subject}/>
-              <div className={[style.cut].join(' ')}></div>
-              <label htmlFor="subject" className={style.placeholder}>Subject</label>
-          </div>
-          <div className={[style.inputContainer, style.ic2].join(' ')}>
-              <input id="description" className={style.input} type="text"  onChange={(e)=>setDescription(e.target.value)} value={description}/>
-              <div className={style.cut}></div>
-              <label htmlFor="description" className={style.placeholder}>Description</label>
-          </div>
-          <label className={style.inputFile}>
-            <input type="file" name="file" onChange={onFileChange}/>
-            <span className={style.inputFileBtn}>Choose a file</span>           
-            <span className={style.inputFileText}>{imageName}</span>
-          </label>
-          <button className={style.submit} type="submit">Create</button>
-      </form>
-  </div>
+    <div className={style.back}>
+      <Form  onSubmit={handleSubmit} style={{ width: '400px', margin: '100px auto',backgroundColor: 'gray', borderRadius: '12px', paddingLeft: '10px'}}>
+        <Form.Label style={{display:'block', color: 'whitesmoke', fontWeight:'bold', fontSize: '2.2rem',textAlign: 'center'}}>Let's create your tutor page!</Form.Label>
+        <Form.Group className="mb-3" controlId="subject" style={{width:'360px',margin: '0px 10px'}}>
+          <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Subject</Form.Label>
+          <Form.Control type="text"  onChange={(e)=>setSubject(e.target.value)} value={subject} required/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="description" style={{width:'360px',margin: '0px 10px'}}>
+          <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Description</Form.Label>
+          <Form.Control as="textarea"  onChange={(e)=>setDescription(e.target.value)} value={description} required/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="file" style={{width:'360px',margin: '0px 10px'}}>
+          <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Image</Form.Label>
+          <Form.Control type="file"  onChange={onFileChange}/>
+        </Form.Group>
+        <div style={{textAlign:'center',margin:'0 0 20px 0'}}>
+          <Button type="submit" size="lg" variant="dark">Create</Button>
+        </div>
+      </Form>
+    </div>
+  
   </>
 }
