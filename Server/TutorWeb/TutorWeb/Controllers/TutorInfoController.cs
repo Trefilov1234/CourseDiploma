@@ -68,6 +68,7 @@ namespace TutorWeb.Controllers
         [HttpGet("tutorWebApi/getAllTutorInfos")]
         public async Task<IActionResult> GetAllTutorInfos()
         {
+            Console.WriteLine("qwe");
             var tutInf = await _tutorContext.TutorInfos.Select(t => 
                 new
                 {

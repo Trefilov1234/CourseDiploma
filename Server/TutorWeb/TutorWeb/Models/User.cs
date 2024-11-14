@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TutorWeb.Models
 {
@@ -15,7 +16,7 @@ namespace TutorWeb.Models
         public string Firstname { get; set; }
 
         [Required]
-        [Column("lastame")]
+        [Column("lastname")]
         public string Lastname { get; set; }
 
         [Required]
@@ -33,6 +34,6 @@ namespace TutorWeb.Models
         [Column("isAdmin")]
         public bool IsAdmin { get; set; }
 
-        public IEnumerable<TutorInfo> TutorInfos { get; set; }
+        public IEnumerable<TutorInfo>? TutorInfos { get; set; }
     }
 }

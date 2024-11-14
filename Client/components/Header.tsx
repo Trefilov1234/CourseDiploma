@@ -99,7 +99,7 @@ export default function Header(){
                     {pages.map(({href,title})=><li key={href}><Link href={href}>{title}</Link></li>)}
                 </ul>
                 <div className={style.userSection}>
-                    {userCookie?<div><Link href="/profile" className={style.profileLink}>{creds.credentials?creds.credentials.login:""}</Link><Link href='#' onClick={logout}>logout</Link></div>:<Link href="/login">login</Link>}           
+                    {userCookie?<div><Link href="/profile" className={style.profileLink}>{creds.credentials?creds.credentials.login:""}</Link><Link href='#' onClick={logout}>logout</Link></div>:<Link href="/login">log in</Link>}           
                 </div>
             </nav>
         </header>

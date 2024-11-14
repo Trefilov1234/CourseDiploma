@@ -23,6 +23,7 @@ namespace TutorWeb.Controllers
         [HttpPost("tutorWebApi/registration")]
         public async Task<ActionResult<User>> Registration(User user)
         {
+            Console.WriteLine("qq");
             var res = await userManager.Register(user);
             if (res.Message.Equals("ok"))
             {
@@ -37,7 +38,6 @@ namespace TutorWeb.Controllers
         [HttpPost("tutorWebApi/login")]
         public IActionResult Login(LoginParams loginParams)
         {
-
             if(userManager.Login(loginParams.Login, loginParams.Password))
             {
                 return Ok();

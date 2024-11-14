@@ -3,6 +3,9 @@ import style from './page.module.css'
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Link from 'next/link';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 export default function Page() {
 
   const [login, setLogin] = useState("");
@@ -45,22 +48,21 @@ export default function Page() {
 
   return <>
   <div className={style.back}>
-      <form className={style.form} onSubmit={handleSubmit}>
-          <div className={style.title}>Welcome</div>
-          <div className={style.subtitle}>Let's login to your account!</div>
-          <div className={[style.inputContainer, style.ic2].join(' ')}>
-              <input id="login" className={style.input} type="text"  onChange={(e)=>setLogin(e.target.value)} value={login}/>
-              <div className={[style.cut, style.cutShort].join(' ')}></div>
-              <label htmlFor="login" className={style.placeholder}>Login</label>
-          </div>
-          <div className={[style.inputContainer, style.ic2].join(' ')}>
-              <input id="password" className={style.input} type="text"  onChange={(e)=>setPassword(e.target.value)} value={password}/>
-              <div className={style.cut}></div>
-              <label htmlFor="password" className={style.placeholder}>Password</label>
-          </div>
-          <button className={style.submit} type="submit">Login</button>
-          <div className={style.noAcc}><Link href="/registration" className={style.noAccLink} >Don't you have an account?</Link></div>
-      </form>
-  </div>
+      <Form  onSubmit={handleSubmit} style={{ width: '400px', margin: '100px auto',backgroundColor: 'gray', borderRadius: '12px' }}>
+        <Form.Label style={{display:'block', color: 'whitesmoke', fontWeight:'bold', fontSize: '2.2rem',textAlign: 'center'}}>Welcome</Form.Label>
+        <Form.Label style={{display:'block', color: 'whitesmoke', fontWeight:'bold', fontSize: '2.2rem',textAlign: 'center'}}>Let's log in to your account!</Form.Label>
+        <Form.Group className="mb-3" controlId="login" style={{width:'380px',margin: '0px 10px'}}>
+          <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Login</Form.Label>
+          <Form.Control type="text"  onChange={(e)=>setLogin(e.target.value)} value={login} required/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="passwrod" style={{width:'380px',margin: '0px 10px'}}>
+          <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Password</Form.Label>
+          <Form.Control type="password"   onChange={(e)=>setPassword(e.target.value)} value={password}/>
+        </Form.Group>
+        <div style={{textAlign:'center',margin:'0 0 20px 0'}}>
+          <Button type="submit" size="lg" variant="dark">Log in</Button>
+        </div>
+      </Form>
+    </div>
   </>
   }
