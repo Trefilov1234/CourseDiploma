@@ -64,7 +64,7 @@ namespace TutorWeb.Services
                 return ("ok",user);
             }
         }
-        public UserCredentials GetUserCrededantials()
+        public UserCredentials GetUserCredentials()
         {
 
             try

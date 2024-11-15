@@ -12,7 +12,7 @@ namespace TutorWeb.Middlewares
         }
         public async Task InvokeAsync(HttpContext context, IUserManager userManager)
         {
-            userManager.GetUserCrededantials();
+            userManager.GetUserCredentials();
             await next.Invoke(context);
         }
     }
