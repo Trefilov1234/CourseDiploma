@@ -8,6 +8,7 @@ namespace TutorWeb.Models
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public bool IsAdmin { get; set; }
+        public bool IsBanned { get; set; }
         public DateTime Expiration { get; set; }
     }
 }

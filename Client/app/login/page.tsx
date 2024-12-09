@@ -43,6 +43,10 @@ export default function Page() {
       {
         toast.error("The data you entered is incorrect");
       }
+      else if (res.status === 404)
+        {
+          toast.error("You have been blocked");
+        }
     }
   };
 

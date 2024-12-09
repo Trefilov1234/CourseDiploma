@@ -34,6 +34,9 @@ namespace TutorWeb.Models
         [Column("isAdmin")]
         public bool IsAdmin { get; set; }
 
+        [Column("isBanned")]
+        public bool IsBanned { get; set; }
+
         public IEnumerable<TutorInfo>? TutorInfos { get; set; }
     }
 }

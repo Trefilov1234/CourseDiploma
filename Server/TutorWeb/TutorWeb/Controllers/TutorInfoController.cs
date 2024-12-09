@@ -31,6 +31,10 @@ namespace TutorWeb.Controllers
             {
                 return Unauthorized();
             }
+            if(userManager.CurrentUser.IsBanned)
+            {
+                return NotFound();
+            }
             var form = await Request.ReadFormAsync();
             var value1 = form["subject"];
             var value2 = form["description"];
@@ -69,6 +73,13 @@ namespace TutorWeb.Controllers
         public async Task<IActionResult> GetAllTutorInfos()
         {
             Console.WriteLine("qwe");
+            if (userManager.CurrentUser != null)
+            {
+                if (userManager.CurrentUser.IsBanned)
+                {
+                    return NotFound();
+                }
+            }
             var tutInf = await _tutorContext.TutorInfos.Select(t => 
                 new
                 {
@@ -89,7 +100,58 @@ namespace TutorWeb.Controllers
                 tutorInfos = tutInf
             });        
         }
+        [HttpGet("tutorWebApi/deleteTutorInfoById/{id}")]
+        public async Task<IActionResult> DeleteTutorInfosById(int id)
+        {
+            if (userManager.CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+            var tutorInfo = await _tutorContext.TutorInfos.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+            _tutorContext.TutorInfos.Remove(tutorInfo);
+            string path = tutorInfo.ImagePath;
+            FileInfo fileInf = new FileInfo(path);
+            if (fileInf.Exists)
+            {
+                fileInf.Delete();
+            }
+            await _tutorContext.SaveChangesAsync();
+            return Ok();
+        }
+        [HttpGet("tutorWebApi/getTutorInfoByQuery/{query}")]
+        public async Task<IActionResult> GetTutorInfosByQuery(string query)
+        {
+            if (userManager.CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+            if (userManager.CurrentUser.IsBanned)
+            {
+                return NotFound();
+            }
+            var tutorInfos = await _tutorContext.TutorInfos.Where(x => x.Subject.Contains(query)|| x.Description.Contains(query)
+            || x.User.Firstname.Contains(query) || x.User.Lastname.Contains(query)).Select(t => new
+            {
+                Id = t.Id,
+                Subject = t.Subject,
+                Description = t.Description,
+                Image = FileHelper.ImageToBase64String(t.ImagePath),
+                User = new
+                {
+                    Id = t.UserId,
+                    Login= t.User.Login,
+                    FirstName = t.User.Firstname,
+                    LastName = t.User.Lastname,
+                    Email = t.User.Email
+                }
+            }
+            ).ToListAsync();
 
+            return Ok(new
+            {
+                tutorInfos = tutorInfos
+            });
+        }
         [HttpGet("tutorWebApi/getTutorInfoById/{id}")]
         public async Task<IActionResult> GetTutorInfoById(int id)
         {
@@ -106,6 +168,7 @@ namespace TutorWeb.Controllers
                 User = new
                 {
                     Id = t.UserId,
+                    Login = t.User.Login,
                     FirstName = t.User.Firstname,
                     LastName = t.User.Lastname,
                     Email = t.User.Email

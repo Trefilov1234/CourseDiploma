@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { redirect } from 'next/navigation'
 import Image from 'react-bootstrap/Image';
-export default function TutorInfo({subject,description,image,firstname,lastname,tutInfId}){
+export default function TutorInfo({subject,image,firstname,lastname,tutInfId}){
 
 
     return (
@@ -18,6 +18,7 @@ export default function TutorInfo({subject,description,image,firstname,lastname,
           {firstname+" "+ lastname}
         </Card.Text>
         <Button variant="primary" href={`/tutorPageDetails/${tutInfId}`}>Details</Button>
+        
       </Card.Body>
     </Card>     
     )

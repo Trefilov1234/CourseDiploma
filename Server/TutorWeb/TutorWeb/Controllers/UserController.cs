@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using TutorWeb.Data;
+using TutorWeb.Helpers;
 using TutorWeb.Models;
 using TutorWeb.Services;
 
@@ -30,7 +31,6 @@ namespace TutorWeb.Controllers
         [HttpGet("tutorWebApi/getUser/{login}")]
         public async Task<ActionResult<User>> GetUser(string login)
         {
-            Console.Write(login);
             var user = await _context.Users.Where(x => x.Login.Equals(login)).FirstAsync();
 
             if (user == null)
@@ -62,6 +62,23 @@ namespace TutorWeb.Controllers
             {
                 return Conflict(new { Error = res.Message });
             }
+        }
+        [HttpGet("tutorWebApi/getUsers")]
+        public async Task<IActionResult> GetUsers()
+        {
+            if (userManager.CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+            if(userManager.CurrentUser.IsBanned)
+            {
+                return NotFound();
+            }
+            var users = await _context.Users.Where(x=>!x.Login.Equals(userManager.CurrentUser.Login)).ToListAsync();
+            return Ok(new
+            {
+                users = users
+            });
         }
 
         // DELETE: api/users/5

@@ -83,7 +83,7 @@ export default function Header(){
     };
 
     return <>
-    <Navbar expand="lg" className="bg-body-tertiary" style={{zIndex:'1000',position:'fixed',width:'100%',top:'0'}}>
+    <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
         <Navbar.Brand href="/">Tutor</Navbar.Brand>
         <Navbar.Toggle />

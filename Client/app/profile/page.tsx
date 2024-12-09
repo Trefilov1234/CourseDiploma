@@ -16,6 +16,7 @@ export default function Page() {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [creds, setCreds] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [loginFromCookie,setLoginFromCookie]=useState("");
 
     const handleSubmit = async (e) => {
@@ -71,6 +72,7 @@ export default function Page() {
     };
     const getUserCredentials = async () => {
         let res;
+        setIsLoading(true);
         try {
           res = await fetch("http://localhost:5262/tutorWebApi/getUserCredentials", {
             method: "GET",
@@ -83,6 +85,7 @@ export default function Page() {
              }
             fetchData();
             console.log(data);
+            setIsLoading(false);
           });
         } catch (err) {
           console.log(err);
@@ -102,6 +105,7 @@ export default function Page() {
             setFirstname(data.firstname);
             setLastname(data.lastname);
             setCreds(data);
+            setIsLoading(false);
             console.log(data);
           });
         } catch (err) {
@@ -110,42 +114,59 @@ export default function Page() {
     };
     useEffect(()=>{
         const fetchData = async () => {
+          
             await getUserCredentials();
+            
          }
-        fetchData();   
+        fetchData();
+          
     },[]);
-    
-        
-    
-    return <>
-    <div className={style.back}>
-      <Form  onSubmit={handleSubmit} style={{ width: '500px', margin: '100px auto',backgroundColor: 'gray', borderRadius: '12px', paddingLeft: '10px',paddingRight: '10px' }}>
-        <Form.Label style={{display:'block', color: 'whitesmoke', fontWeight:'bold', fontSize: '2.2rem',textAlign: 'center'}}>Let's change your credentials!</Form.Label>
-        <Form.Group className="mb-3" controlId="first name" style={{margin: '0px 10px'}}>
-          <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>First name</Form.Label>
-          <Form.Control type="text"  onChange={(e)=>setFirstname(e.target.value)} value={firstname} required/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="last name" style={{margin: '0px 10px'}}>
-          <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Last name</Form.Label>
-          <Form.Control type="text"   onChange={(e)=>setLastname(e.target.value)} value={lastname}/>
-        </Form.Group>
-        <Form.Group className="mb-3"  controlId="email" style={{margin: '0px 10px'}}>
-          <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Email</Form.Label>
-          <Form.Control type="text" onChange={(e)=>setEmail(e.target.value)} value={email} required/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="login" style={{margin: '0px 10px'}}>
-          <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Login</Form.Label>
-          <Form.Control type="text" onChange={(e)=>setLogin(e.target.value)} value={login} required/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="password" style={{margin: '0px 10px'}}>
-          <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Password</Form.Label>
-          <Form.Control type="password" onChange={(e)=>setPassword(e.target.value)} value={password}/>
-        </Form.Group>
-        <div style={{textAlign:'center',margin:'0 0 20px 0'}}>
-          <Button type="submit" size="lg" variant="dark">Change</Button>
-        </div>
-      </Form>
-    </div>
-  </>
+    if(isLoading)
+    {
+      return <Spinner/>
     }
+    else if(creds)
+    {
+      if(creds.isBanned)
+      {
+        window.location.replace('/login');
+      }
+      else{
+        return <>
+        <div className={style.back}>
+          <Form  onSubmit={handleSubmit} style={{ width: '500px', margin: '100px auto',backgroundColor: 'gray', borderRadius: '12px', paddingLeft: '10px',paddingRight: '10px' }}>
+            <Form.Label style={{display:'block', color: 'whitesmoke', fontWeight:'bold', fontSize: '2.2rem',textAlign: 'center'}}>Let's change your credentials!</Form.Label>
+            <Form.Group className="mb-3" controlId="first name" style={{margin: '0px 10px'}}>
+              <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>First name</Form.Label>
+              <Form.Control type="text"  onChange={(e)=>setFirstname(e.target.value)} value={firstname} required/>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="last name" style={{margin: '0px 10px'}}>
+              <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Last name</Form.Label>
+              <Form.Control type="text"   onChange={(e)=>setLastname(e.target.value)} value={lastname}/>
+            </Form.Group>
+            <Form.Group className="mb-3"  controlId="email" style={{margin: '0px 10px'}}>
+              <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Email</Form.Label>
+              <Form.Control type="text" onChange={(e)=>setEmail(e.target.value)} value={email} required/>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="login" style={{margin: '0px 10px'}}>
+              <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Login</Form.Label>
+              <Form.Control type="text" onChange={(e)=>setLogin(e.target.value)} value={login} required/>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="password" style={{margin: '0px 10px'}}>
+              <Form.Label style={{color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem'}}>Password</Form.Label>
+              <Form.Control type="password" onChange={(e)=>setPassword(e.target.value)} value={password}/>
+            </Form.Group>
+            <div style={{textAlign:'center',margin:'0 0 20px 0'}}>
+              <Button type="submit" size="lg" variant="dark">Change</Button>
+            </div>
+            {creds.isAdmin?<div style={{textAlign:'center',margin:'0 0 20px 0'}}>
+              <Button  size="lg" variant="dark" href='/admin'>Admin panel</Button>
+            </div>:""}
+          </Form>
+        </div>
+      </>
+    }
+  }
+}
+
 

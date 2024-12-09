@@ -38,14 +38,19 @@ namespace TutorWeb.Controllers
         [HttpPost("tutorWebApi/login")]
         public IActionResult Login(LoginParams loginParams)
         {
-            if(userManager.Login(loginParams.Login, loginParams.Password))
-            {
-                return Ok();
-            }
-            else
+            Console.WriteLine("yatit" + loginParams.Login + loginParams.Password);
+            var res = userManager.Login(loginParams.Login, loginParams.Password);
+            
+            if(res.Equals("user not found"))
             {
                 return BadRequest();
             } 
+            else if(res.Equals("ban"))
+            {
+                Console.WriteLine("yaaaaa");
+                return NotFound();
+            }
+            return Ok();
         }
         [HttpPost("tutorWebApi/logout")]
         public IActionResult Logout()
@@ -56,6 +61,26 @@ namespace TutorWeb.Controllers
                 return Unauthorized();
             }
             userManager.Logout();
+            return Ok();
+        }
+        [HttpPost("tutorWebApi/banOrUnbanUserById/{id}")]
+        public async Task<IActionResult> BanOrUnbanUserById(int id)
+        {
+            Console.WriteLine("YATUT" + id);
+            if (userManager.CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+            var user = await _context.Users.Where(x => x.Id.Equals(id)).FirstAsync();
+            if(user.IsBanned)
+            {
+                user.IsBanned = false;
+            }
+            else
+            {
+                user.IsBanned = true;
+            }
+            await _context.SaveChangesAsync();
             return Ok();
         }
     }

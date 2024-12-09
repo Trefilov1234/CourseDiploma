@@ -18,18 +18,25 @@ namespace TutorWeb.Services
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public bool Login(string login, string password)
+        public string Login(string login, string password)
         {
             var passwordHash = SHA256Encrypter.Encript(password);
 
             var user = tutorContext.Users.FirstOrDefault(u => u.Login == login && u.Password == passwordHash);
+            if (user == null) { Console.WriteLine("null"); };
+           
             if (user != null)
             {
+                if (user.IsBanned)
+                {
+                    return "ban";
+                }
                 //  HttpContext.Response.Cookies.Append("auth", loginView.Login);
                 UserCredentials userCredentials = new UserCredentials()
                 {
                     Login = user.Login,
                     IsAdmin = user.IsAdmin,
+                    IsBanned= user.IsBanned,
                     Firstname=user.Firstname,
                     Lastname=user.Lastname,
                     Expiration= DateTime.Now + TimeSpan.FromHours(1)
@@ -37,10 +44,10 @@ namespace TutorWeb.Services
                 var userCred = JsonSerializer.Serialize(userCredentials);
                 var hash = AesOperation.EncryptString("b14ca5898a4e4133bbce2ea2315a1916", userCred);
                 httpContextAccessor.HttpContext.Response.Cookies.Append("auth", hash,new CookieOptions() { Expires= DateTime.Now + TimeSpan.FromHours(1) });
-                return true;
+                return "ok";
 
             }
-            return false;
+            return "user not found";
         }
 
         public async Task<(string Message,User User)> Register(User user)
@@ -64,7 +71,7 @@ namespace TutorWeb.Services
                 return ("ok",user);
             }
         }
-        public UserCredentials GetUserCredentials()
+        public async Task<UserCredentials> GetUserCredentials()
         {
 
             try
@@ -74,6 +81,9 @@ namespace TutorWeb.Services
                     var hash = httpContextAccessor.HttpContext.Request.Cookies["auth"];
                     var json = AesOperation.DecryptString("b14ca5898a4e4133bbce2ea2315a1916", hash);
                     CurrentUser = JsonSerializer.Deserialize<UserCredentials>(json);
+                    Console.WriteLine(CurrentUser.Login);
+                    var isBanned = await tutorContext.Users.Where(x => x.Login.Equals(CurrentUser.Login)).FirstOrDefaultAsync();
+                    CurrentUser.IsBanned = isBanned.IsBanned;
                     return CurrentUser;
                 }
             }

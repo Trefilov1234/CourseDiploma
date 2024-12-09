@@ -48,7 +48,7 @@ export default function Page()
             window.location.replace('/');
             
           }
-          else if (res.status === 401)
+          else if (res.status === 401||res.status === 404)
           {
             window.location.replace('/login');
           }
