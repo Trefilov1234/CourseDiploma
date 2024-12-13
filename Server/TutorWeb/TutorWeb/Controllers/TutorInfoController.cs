@@ -56,9 +56,9 @@ namespace TutorWeb.Controllers
             }
             
             Console.WriteLine(value1+value2);
-            int tutorInfoId = _tutorContext.TutorInfos.Count() + 1;
+            /*int tutorInfoId = _tutorContext.TutorInfos.Count() + 1;
             
-            tutorInfo.Id=tutorInfoId;
+            tutorInfo.Id=tutorInfoId;*/
             tutorInfo.Subject = value1.ToString();
             tutorInfo.Description = value2.ToString();
             
@@ -72,7 +72,6 @@ namespace TutorWeb.Controllers
         [HttpGet("tutorWebApi/getAllTutorInfos")]
         public async Task<IActionResult> GetAllTutorInfos()
         {
-            Console.WriteLine("qwe");
             if (userManager.CurrentUser != null)
             {
                 if (userManager.CurrentUser.IsBanned)
@@ -110,10 +109,14 @@ namespace TutorWeb.Controllers
             var tutorInfo = await _tutorContext.TutorInfos.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
             _tutorContext.TutorInfos.Remove(tutorInfo);
             string path = tutorInfo.ImagePath;
-            FileInfo fileInf = new FileInfo(path);
-            if (fileInf.Exists)
+            FileInfo fileInf;
+            if (!String.IsNullOrEmpty(path))
             {
-                fileInf.Delete();
+                fileInf = new FileInfo(path);
+                if (fileInf.Exists)
+                {
+                    fileInf.Delete();
+                }
             }
             await _tutorContext.SaveChangesAsync();
             return Ok();

@@ -12,5 +12,6 @@ namespace TutorWeb.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<TutorInfo> TutorInfos { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

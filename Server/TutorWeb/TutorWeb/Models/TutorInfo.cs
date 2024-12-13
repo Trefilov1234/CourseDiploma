@@ -25,5 +25,6 @@ namespace TutorWeb.Models
 
         public User User { get; set; }
 
+        public IEnumerable<Comment>? Comments { get; set; }
     }
 }

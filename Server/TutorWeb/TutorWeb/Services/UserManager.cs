@@ -62,9 +62,7 @@ namespace TutorWeb.Services
             }
             else
             {
-                int userId = tutorContext.Users.Count() + 1;
                 var passwordHash = SHA256Encrypter.Encript(user.Password);
-                user.Id = userId;
                 user.Password = passwordHash;
                 tutorContext.Users.Add(user);
                 await tutorContext.SaveChangesAsync();

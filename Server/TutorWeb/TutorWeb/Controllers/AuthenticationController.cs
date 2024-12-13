@@ -23,7 +23,6 @@ namespace TutorWeb.Controllers
         [HttpPost("tutorWebApi/registration")]
         public async Task<ActionResult<User>> Registration(User user)
         {
-            Console.WriteLine("qq");
             var res = await userManager.Register(user);
             if (res.Message.Equals("ok"))
             {
@@ -38,7 +37,6 @@ namespace TutorWeb.Controllers
         [HttpPost("tutorWebApi/login")]
         public IActionResult Login(LoginParams loginParams)
         {
-            Console.WriteLine("yatit" + loginParams.Login + loginParams.Password);
             var res = userManager.Login(loginParams.Login, loginParams.Password);
             
             if(res.Equals("user not found"))
@@ -66,7 +64,6 @@ namespace TutorWeb.Controllers
         [HttpPost("tutorWebApi/banOrUnbanUserById/{id}")]
         public async Task<IActionResult> BanOrUnbanUserById(int id)
         {
-            Console.WriteLine("YATUT" + id);
             if (userManager.CurrentUser == null)
             {
                 return Unauthorized();
