@@ -22,7 +22,6 @@ let fetcher = async() => {
       });
     if (!response.ok) throw new Error('fetch ' + response.status);
     let res=await response.json();
-    console.log(res);
     return res;
   };
   const getCredentials = async () => {
@@ -36,7 +35,6 @@ let fetcher = async() => {
         
       });
       let jsonRes=await res.json();
-      console.log(jsonRes)
       if(jsonRes)
       {
         setCreds(jsonRes);
@@ -57,7 +55,6 @@ const getComments = async () => {
       
     });
     let jsonRes=await res.json();
-    console.log(jsonRes)
     if(jsonRes)
     {
       setComments(jsonRes);
@@ -137,7 +134,7 @@ const getComments = async () => {
       let tutorInf=data['tutorInfo'];
       return <>
       <div className={style.back}>
-          <Stack direction="horizontal" gap={5} style={{ width: 'fit-content', margin: '50px auto',backgroundColor: 'gray', borderRadius: '12px', display: "flex",flexDirection: "column"}}>
+          <Stack direction="horizontal" gap={5} style={{ wordBreak:'break-all',width: 'fit-content', margin: '50px auto',backgroundColor: 'gray', borderRadius: '12px', display: "flex",flexDirection: "column"}}>
             {tutorInf.image?<Image src={"data:image/jpg;base64,"+tutorInf.image} alt="../" thumbnail style={{width:"600px", height:"400px",objectFit: "cover",maxWidth:'100%',margin:'10px 10px'}}/>:
             <Image src={photo.src} alt="../" thumbnail  style={{width:"600px", height:"400px", margin:'10px 10px',objectFit: "cover",maxWidth:'100%'}}/>}
             <div>
@@ -169,7 +166,7 @@ const getComments = async () => {
               />
               <Button onClick={function(){sendComment(tutorInf.id)}}>Send</Button>
             </InputGroup>
-            {comments.comments.length!=0?<div>
+            {comments.comments.length!=0?<div style={{wordBreak:'break-all'}}>
               {comments.comments.map((comm,key)=>
               <div key={key} style={{border:'0.5rem solid #535045', borderRadius:'12px',margin: '0.5rem', width:"30rem",padding:'10px'}}>
                 <div style={{display:'block', color: 'whitesmoke', fontWeight:'bold', fontSize: '1.2rem',textAlign: 'left'}}>{"User: "+comm.firstName+" "+ comm.lastName}</div>

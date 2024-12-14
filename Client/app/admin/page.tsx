@@ -17,7 +17,6 @@ export default function AdminPanel() {
         let res=await response.json();
         
         res=res.users.sort((a,b)=>(a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
-        console.log(res);
         return res;
       };
     const {data,error,isLoading,isValidating,mutate}=useSWR("http://localhost:5262/tutorWebApi/getUsers/",fetcher);

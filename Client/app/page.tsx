@@ -28,7 +28,6 @@ export default function Page() {
         }
     if (!response.ok) throw new Error('fetch ' + response.status);
     let jsonRes=await response.json();
-    console.log(jsonRes);
     if(jsonRes)
       {
         setIsLoading(false);
@@ -54,7 +53,6 @@ export default function Page() {
     }
   if (!response.ok) throw new Error('fetch ' + response.status);
   let jsonRes=await response.json();
-  console.log(jsonRes);
   if(jsonRes)
     {
       setIsLoading(false);
@@ -76,7 +74,6 @@ export default function Page() {
     else if(data)
     {
       let tutorInfos=data['tutorInfos'];
-      console.log(tutorInfos);
       return <>
       <div className={style.back}>
         <div style={{width:'fit-content'}}>

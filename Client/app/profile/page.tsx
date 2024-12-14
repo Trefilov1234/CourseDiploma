@@ -37,7 +37,7 @@ export default function Page() {
           }),
         });
         jsonRes=await res.json();
-        console.log(res);
+
         if (res.status === 200) {
           setLogin("");
           setEmail("");
@@ -84,7 +84,6 @@ export default function Page() {
                 getUser(data.credentials.login);
              }
             fetchData();
-            console.log(data);
             setIsLoading(false);
           });
         } catch (err) {
@@ -106,7 +105,6 @@ export default function Page() {
             setLastname(data.lastname);
             setCreds(data);
             setIsLoading(false);
-            console.log(data);
           });
         } catch (err) {
           console.log(err);

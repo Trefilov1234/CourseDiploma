@@ -33,7 +33,6 @@ export default function Page()
             credentials: 'include',
             body: formData,
           });
-          console.log(res);
           if (res.status === 200) {
             
             
@@ -62,7 +61,6 @@ export default function Page()
       const onFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setImageName(e.target.files[0].name);
         setImage(e.target.files[0]);
-        console.log(e.target.files);
     }
     return <>
     <div className={style.back}>

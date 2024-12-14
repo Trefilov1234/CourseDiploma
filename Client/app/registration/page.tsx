@@ -17,11 +17,7 @@ export default function Page() {
         e.preventDefault();
         let res;
         let resJson;
-        console.log(firstname);
-        console.log(lastname);
-        console.log(email);
-        console.log(login);
-        console.log(password);
+
         try {
           res = await fetch("http://localhost:5262/tutorWebApi/registration", {
             method: "POST",
@@ -34,9 +30,7 @@ export default function Page() {
               password: password
             }),
           });
-          console.log(res);
           resJson = await res.json();
-          console.log(resJson);
           if (res.status === 201) {
             setFirstname("");
             setLastname("");

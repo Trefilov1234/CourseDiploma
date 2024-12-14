@@ -39,7 +39,6 @@ export default function Header(){
 
     const getCredentials = async () => {
         setIsLoading(true);
-        console.log("haha");
         let res;
         try {
           res = await fetch("http://localhost:5262/tutorWebApi/getUserCredentials", {
@@ -72,7 +71,6 @@ export default function Header(){
             headers: { 'Content-Type': 'application/json;charset=utf-8'},
             
           });
-          console.log(res);
           if(res.status===200)
           {
             window.location.replace('/');

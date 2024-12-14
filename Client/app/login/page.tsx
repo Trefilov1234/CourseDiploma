@@ -23,7 +23,6 @@ export default function Page() {
           password: password
         }),
       });
-      console.log(res);
       if (res.status === 200) {
         setLogin("");
         setPassword("");
